@@ -1,0 +1,26 @@
+{
+  "name": "solana.avado.dnp.dappnode.eth",
+  "version": "0.0.1",
+  "description": "TODO",
+  "autoupdate": true,
+  "type": "service",
+  "avatar": "/ipfs/QmYRmFCtdXvqq3drc6kBXxeWiiMatTfKVpVrmLX883cQbR",
+  "author": "heeckhau",
+  "image": {
+    "volumes": [
+      "data:/data",
+      "/var/run/docker.sock:/var/run/docker.sock"
+    ],
+    "ports": [
+      "8899:8899",
+      "8900:8900P"
+    ],
+    "environment": [
+      "EXTRA_OPTS="
+    ]
+  },
+  "links": {
+    "homepage": "https://your-project-homepage-or-docs.io"
+  },
+  "license": "apache-2.0"
+}

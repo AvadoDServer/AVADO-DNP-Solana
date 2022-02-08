@@ -1,0 +1,14 @@
+version: '3.4'
+services:
+  solana.avado.dnp.dappnode.eth:
+    build: ./build
+    image: 'solana.avado.dnp.dappnode.eth:0.0.1'
+    restart: always
+    volumes:
+      - 'data:/data'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    ports:
+      - '8899:8899'
+      - '8900:8890'
+volumes:
+  data: {}

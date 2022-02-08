@@ -1,0 +1,18 @@
+{
+  "name": "rpdmonitor",
+  "version": "1.0.0",
+  "description": "Server side rpd interface",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "heeckhau",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "adm-zip": "^0.5.9",
+    "axios": "^0.24.0",
+    "restify": "^8.6.0",
+    "restify-cors-middleware2": "^2.1.2",
+    "server.js": "^1.0.0"
+  }
+}
