@@ -25,10 +25,10 @@ const Comp = () => {
     }, []);
 
     const test = async () => {
-        // const command = "cd /Users/heeckhau/git/avado-daps/AVADO-DNP-Solana/tmp; wget https://raw.githubusercontent.com/heeckhau/AVADO-DNP-Rotki/master/releases.json -O /Users/heeckhau/git/avado-daps/AVADO-DNP-Solana/tmp/test2.json; pwd;";
-        const command = "cd /Users/heeckhau/git/avado-daps/AVADO-DNP-Solana/tmp; pwd; ls;";
-        await axios.post(`http://localhost:9999/test`, { command: command }, { timeout: 5 * 60 * 1000 }).then((res) => {
+        const command = '/home/solana/.local/share/solana/install/active_release/bin/solana --version';
+        await axios.post(`http://solana.my.ava.do:9999/test`, { command: command }, { timeout: 5 * 60 * 1000 }).then((res) => {
             console.log(`test ${command}: ` + res.data);
+            alert(res.data)
         })
     }
 

@@ -19,7 +19,7 @@ const cors = corsMiddleware({
     ]
 });
 
-const network = process.env.NETWORK; // either "prater" or "mainnet"
+const solanaBaseDir = "/solana";
 
 server.pre(cors.preflight);
 server.use(cors.actual);
@@ -30,7 +30,7 @@ server.post("/test", (req, res, next) => {
         res.send(400, "not enough parameters");
         return next();
     } else {
-        rpd(req.body.command).then((stdout) => {
+        runOnHost(req.body.command).then((stdout) => {
             res.send(200, stdout);
             return next();
         }).catch((e) => {
@@ -60,12 +60,10 @@ const execute = (cmd) => {
     });
 }
 
-const rpd = (command) => {
-    const cmd = `docker run --rm --privileged  --net=host --pid=host --ipc=host --volume /:/host  busybox  chroot /host ${command}`;
-    console.log(`Running ${cmd}`);
-    
+const runOnHost = (command) => {
+    const cmd = `docker run --rm --privileged  --net=host --pid=host --ipc=host --volume /:/host  busybox  chroot /host sudo -u solana sh -c "${command}"`;
+    console.log(`Running ${cmd}`);    
     const executionPromise = execute(cmd);
-
     return executionPromise;
 }
 

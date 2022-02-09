@@ -4,7 +4,7 @@
   "description": "TODO",
   "autoupdate": true,
   "type": "service",
-  "avatar": "/ipfs/QmYRmFCtdXvqq3drc6kBXxeWiiMatTfKVpVrmLX883cQbR",
+  "avatar": "/ipfs/QmVvnXrzF3PwghVEBphg6Sj3xtZuwsorKyKp3AVLtU6SkX",
   "author": "heeckhau",
   "image": {
     "volumes": [
@@ -13,7 +13,7 @@
     ],
     "ports": [
       "8899:8899",
-      "8900:8900P"
+      "8900:8900"
     ],
     "environment": [
       "EXTRA_OPTS="

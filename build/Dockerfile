@@ -8,18 +8,23 @@ RUN rm -Rf build && yarn run build
 
 FROM alpine:latest
 
-RUN apk add supervisor nginx nodejs npm
+RUN apk add supervisor nginx nodejs npm docker bash
 
+#Copy wizard
 COPY --from=builder /usr/src/app/wizard/build /usr/local/wizard
-
-COPY supervisord.conf /etc/supervisord.conf
-COPY nginx.conf /etc/nginx/
-
 
 # Monitor
 WORKDIR /usr/src/monitor
 COPY monitor .
 RUN npm i --production
+
+# Other files
+COPY supervisord.conf /etc/supervisord.conf
+COPY installSolanaDocker.sh /root/
+COPY installSolanaHost.sh /root/
+RUN chmod +x "/root/installSolanaDocker.sh"
+RUN chmod +x "/root/installSolanaHost.sh"
+COPY nginx.conf /etc/nginx/
 
 WORKDIR /
 ENTRYPOINT ["supervisord", "--nodaemon", "--configuration", "/etc/supervisord.conf"]
