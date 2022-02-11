@@ -1,5 +1,7 @@
 const restify = require("restify");
+const errors = require('restify-errors');
 const corsMiddleware = require("restify-cors-middleware2");
+
 const exec = require("child_process").exec;
 const fs = require('fs');
 
@@ -19,7 +21,7 @@ const cors = corsMiddleware({
     ]
 });
 
-const solanaBaseDir = "/solana";
+const solanaBaseDir = "/home/solana/.local/share/solana/install/active_release/bin/";
 
 server.pre(cors.preflight);
 server.use(cors.actual);
@@ -40,21 +42,42 @@ server.post("/test", (req, res, next) => {
     }
 });
 
+server.get("/version", (req, res, next) => {
+    try {
+        runOnHost(`${solanaBaseDir}/solana --version`)
+            .then((stdout) => {
+                const versionRegex = /solana-cli (?<version>\d+\.\d+\.\d+) \(.*\)/g;
+                const regexResult = versionRegex.exec(stdout);
+                if (regexResult) {
+                    res.send(200, regexResult.groups.version);
+                    next();
+                }
+                else
+                    return next(new errors.InternalServerError('Something went wrong1'));
+            })
+            .catch((error) => {
+                return next(new errors.InternalServerError(error))
+            });
+    } catch (error) {
+        return next(new errors.InternalServerError('Something went wrong'));
+    }
+});
+
 const execute = (cmd) => {
     return new Promise((resolve, reject) => {
         const child = exec(cmd, (error, stdout, stderr) => {
             const debug = false;
-            
-                if (error) {
-                    console.log(`error: ${error.message}`);
-                    return reject(error.message);
-                }
-                if (stderr) {
-                    console.log(`error: ${stderr}`);
-                    return reject(stderr);
-                }
-                return resolve(stdout);
-            
+
+            if (error) {
+                console.log(`error: ${error.message}`);
+                return reject(error.message);
+            }
+            if (stderr) {
+                console.log(`error: ${stderr}`);
+                return reject(stderr);
+            }
+            return resolve(stdout);
+
         });
         child.stdout.on('data', (data) => console.log(data.toString()));
     });
@@ -62,7 +85,7 @@ const execute = (cmd) => {
 
 const runOnHost = (command) => {
     const cmd = `docker run --rm --privileged  --net=host --pid=host --ipc=host --volume /:/host  busybox  chroot /host sudo -u solana sh -c "${command}"`;
-    console.log(`Running ${cmd}`);    
+    console.log(`Running ${cmd}`);
     const executionPromise = execute(cmd);
     return executionPromise;
 }
