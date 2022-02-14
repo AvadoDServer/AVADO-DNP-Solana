@@ -1,7 +1,8 @@
 #!/bin/bash
 
 USERNAME="solana"
-VERSION="stable"
+SOLANA_VERSION=$1
+VERSION=${SOLANA_VERSION:="1.8.11"}
 
 # add user
 if ! id "${USERNAME}" &>/dev/nulls; then
@@ -9,15 +10,17 @@ if ! id "${USERNAME}" &>/dev/nulls; then
     adduser --disabled-password --gecos --quiet solana
 fi
 
-SOLANA="/home/solana/.local/share/solana/install/active_release/bin/solana"
+SOLANA="/home/solana/.local/share/solana/install/releases/${VERSION}/solana-release/bin/solana"
 
 version () {
     [ -f ${SOLANA} ] && sudo -u ${USERNAME} ${SOLANA} --version
 }
 
 if [ ! -f ${SOLANA} -a version ]; then
-    sudo -u ${USERNAME} sh -c "wget https://release.solana.com/${VERSION}/install -O - | sh"
+    sudo -u ${USERNAME} sh -c "wget https://release.solana.com/v${VERSION}/install -O - | sh"
 fi
+
+# TODO : create wallets if neccesary
 
 version
 

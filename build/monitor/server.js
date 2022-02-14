@@ -7,6 +7,9 @@ const fs = require('fs');
 
 console.log("Monitor starting...");
 
+const solanaVersion = process.env.SOLANA_VERSION;
+console.log("Solana version " + solanaVersion);
+
 const server = restify.createServer({
     name: "MONITOR",
     version: "1.0.0"
@@ -21,7 +24,7 @@ const cors = corsMiddleware({
     ]
 });
 
-const solanaBaseDir = "/home/solana/.local/share/solana/install/active_release/bin/";
+const solanaBaseDir = `/home/solana/.local/share/solana/install/releases/${solanaVersion}/solana-release/bin/`;
 
 server.pre(cors.preflight);
 server.use(cors.actual);

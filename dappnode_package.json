@@ -1,6 +1,7 @@
 {
   "name": "solana.avado.dnp.dappnode.eth",
   "version": "0.0.1",
+  "upstream": "1.8.14",
   "description": "TODO",
   "autoupdate": true,
   "type": "service",
