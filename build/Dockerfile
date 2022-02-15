@@ -21,13 +21,11 @@ COPY monitor .
 RUN npm i --production
 
 # Other files
-COPY supervisord.conf /etc/supervisord.conf
-COPY installSolanaDocker.sh /root/
-COPY installSolanaHost.sh /root/
-RUN chmod +x "/root/installSolanaDocker.sh"
-RUN chmod +x "/root/installSolanaHost.sh"
+COPY config/supervisord.conf /etc/supervisord.conf
+COPY /config/nginx.conf /etc/nginx/
+COPY config/*.sh /root/
+RUN sh -c "chmod +x /root/*.sh"
 RUN echo ${VERSION} > /root/SOLANA_VERSION
-COPY nginx.conf /etc/nginx/
 
 WORKDIR /
 ENTRYPOINT ["supervisord", "--nodaemon", "--configuration", "/etc/supervisord.conf"]
