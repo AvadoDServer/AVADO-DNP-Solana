@@ -21,3 +21,9 @@ tar jxf solana-release-x86_64-unknown-linux-gnu.tar.bz2
 cd solana-release/
 export PATH=$PWD/bin:$PATH
 ```
+
+
+clusters:
+* mainnet-beta
+* testnet
+* devnet

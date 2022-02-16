@@ -10,6 +10,9 @@ services:
     volumes:
       - 'data:/data'
       - '/var/run/docker.sock:/var/run/docker.sock'
+    environment:
+      - SOLANA_CLUSTER=testnet
+      - EXTRA_OPTS=
     ports:
       - '8899:8899'
       - '8900:8890'

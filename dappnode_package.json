@@ -17,6 +17,7 @@
       "8900:8900"
     ],
     "environment": [
+      "SOLANA_CLUSTER=testnet",
       "EXTRA_OPTS="
     ]
   },
