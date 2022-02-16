@@ -12,10 +12,7 @@
       "data:/data",
       "/var/run/docker.sock:/var/run/docker.sock"
     ],
-    "ports": [
-      "8899:8899",
-      "8900:8900"
-    ],
+    "ports": [],
     "environment": [
       "SOLANA_CLUSTER=testnet",
       "EXTRA_OPTS="

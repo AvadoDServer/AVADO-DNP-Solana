@@ -93,6 +93,31 @@ const runOnHost = (command) => {
     return executionPromise;
 }
 
+server.post('/upload', async (req, res, next) => {
+    console.log("upload key");
+
+    if (!req.files.file || (req.files.file.name !== "validator-keypair.json" && req.files.file.name !== "vote-account-keypair.json")) {
+        res.send({code: 'success', message: `Upload failed: invalid file name`});
+        return next(new errors.InvalidArgumentError("error"));
+    }
+
+    const file = req.files.file;
+
+    // copy file to host
+    const cmd = `docker run --rm --privileged  --net=host --pid=host --ipc=host --volume /:/host  busybox  chroot /host docker cp DAppNodePackage-solana.avado.dnp.dappnode.eth:${file.path} /home/solana/${file.name}`
+    await execute(cmd);
+    console.log("received " + file.name);
+    // set file ownership to solana user
+    await execute(`docker run --rm --privileged  --net=host --pid=host --ipc=host --volume /:/host  busybox  chroot /host sh -c "chown solana:solana /home/solana/${file.name}"`)
+    
+    res.send({
+        code: 'success',
+        info: file.name,
+        message: `Uploaded ${file.name}`,
+    });
+    next();
+});
+
 
 server.listen(9999, function () {
     console.log("%s listening at %s", server.name, server.url);

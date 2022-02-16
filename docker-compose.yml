@@ -13,8 +13,5 @@ services:
     environment:
       - SOLANA_CLUSTER=testnet
       - EXTRA_OPTS=
-    ports:
-      - '8899:8899'
-      - '8900:8890'
 volumes:
   data: {}

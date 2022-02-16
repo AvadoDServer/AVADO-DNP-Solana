@@ -22,6 +22,11 @@ cd solana-release/
 export PATH=$PWD/bin:$PATH
 ```
 
+Ports (8899 and 8900):
+no ports in the docker file, because they are opened on the host
+
+
+
 
 clusters:
 * mainnet-beta

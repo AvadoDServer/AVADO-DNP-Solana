@@ -6,6 +6,10 @@ const Comp = () => {
     const [wampSession, setWampSession] = React.useState();
     const [version, setVersion] = React.useState();
     const [installed, setInstalled] = React.useState(false);
+    const [uploadValidatorKeyPairResult, setUploadValidatorKeyPairResult] = React.useState();
+    const [uploadVoteAccountKeyPairResult, setUploadVoteAccountKeyPairResult] = React.useState();
+    
+    const monitor = "http://solana.my.ava.do:9999";
 
     React.useEffect(() => {
         const url = "ws://wamp.my.ava.do:8080/ws";
@@ -46,7 +50,7 @@ const Comp = () => {
 
     const test = async () => {
         const command = '/home/solana/.local/share/solana/install/active_release/bin/solana --version';
-        await axios.post(`http://solana.my.ava.do:9999/test`, { command: command }, { timeout: 5 * 60 * 1000 }).then((res) => {
+        await axios.post(`${monitor}/test`, { command: command }, { timeout: 5 * 60 * 1000 }).then((res) => {
             console.log(`test ${command}: ` + res.data);
             alert(res.data)
         })
@@ -54,7 +58,7 @@ const Comp = () => {
 
     const updateVersion = async () => {
         console.log('checking version')
-        await axios.get(`http://solana.my.ava.do:9999/version`)
+        await axios.get(`${monitor}/version`)
             .then((res) => setVersion(res.data))
             .catch(error => console.log(error))
     }
@@ -68,6 +72,22 @@ const Comp = () => {
         if (foo)
             return foo.groups.version
         return null;
+    }
+
+    async function uploadFile(file, expecteFileName, setMsg) {
+        if (file.name !== expecteFileName) {
+            setMsg("Expected file name " + expecteFileName)
+            return;
+        }
+        const data = new FormData();
+        data.append('file', file);
+        axios.post(`${monitor}/upload`, data).then(res => {
+            //TODO Error handling
+            // console.log(res);
+            setMsg(res.data.message);
+        }).catch(err => {
+            console.log(err);
+        });
     }
 
 
@@ -91,7 +111,28 @@ const Comp = () => {
                         <div className="field">
                             <button className="button" onClick={test}>Test</button>
                         </div>
-                        <p>Running Solana {version}</p>
+                        <p>Using Solana {version}</p>
+
+                        <div>
+                            validator-keypair.json (<a href="https://docs.solana.com/running-validator/validator-start#generate-identity">doc</a>)&nbsp;
+                            <input
+                                type="file"
+                                onChange={e => uploadFile(e.target.files[0], "validator-keypair.json", setUploadValidatorKeyPairResult)}
+                            />
+                            {uploadValidatorKeyPairResult && (<div className="is-size-7">{uploadValidatorKeyPairResult}</div>)}
+                        </div>
+
+                        <div>
+                            vote-account-keypair.json (<a href="https://docs.solana.com/running-validator/validator-start#create-vote-account">doc</a>)&nbsp;
+                            <input
+                                type="file"
+                                onChange={e => uploadFile(e.target.files[0], "vote-account-keypair.json", setUploadVoteAccountKeyPairResult)}
+                            />
+                            {uploadVoteAccountKeyPairResult && (<div className="is-size-7">{uploadVoteAccountKeyPairResult}</div>)}
+                        </div>
+
+
+
 
                     </div>
                 </div>
